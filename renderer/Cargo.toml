@@ -2,6 +2,14 @@
 name = "jinja-renderer"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+documentation = "https://docs.rs/jinja-renderer"
+repository = "https://github.com/tyrchen/jinja-renderer"
+homepage = "https://github.com/tyrchen/jinja-renderer"
+description = """
+useful utilities for rendering minijinja templates
+"""
+readme = "../README.md"
 
 [features]
 default = ["derive"]

@@ -3,5 +3,5 @@ members = ["renderer", "derive_renderer"]
 resolver = "2"
 
 [workspace.dependencies]
-jinja-renderer = { path = "renderer" }
-derive-jinja-renderer = { path = "derive_renderer" }
+jinja-renderer = { version = "0.1", path = "renderer" }
+derive-jinja-renderer = { version = "0.1", path = "derive_renderer" }
