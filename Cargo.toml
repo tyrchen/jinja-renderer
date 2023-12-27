@@ -1,0 +1,7 @@
+[workspace]
+members = ["renderer", "derive_renderer"]
+resolver = "2"
+
+[workspace.dependencies]
+jinja-renderer = { path = "renderer" }
+derive-jinja-renderer = { path = "derive_renderer" }
