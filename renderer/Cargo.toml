@@ -1,6 +1,6 @@
 [package]
 name = "jinja-renderer"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 license = "MIT"
 documentation = "https://docs.rs/jinja-renderer"
@@ -15,18 +15,21 @@ readme = "../README.md"
 default = ["derive"]
 derive = ["derive-jinja-renderer"]
 icon = ["free-icons"]
-with-axum = ["axum-core", "http"]
+markdown = ["comrak"]
 minify = ["minify-html"]
+with-axum = ["axum-core", "http"]
+
 
 [dependencies]
-axum-core = { version = "0.4.1", optional = true }
+axum-core = { version = "0.4", optional = true }
+comrak = { version = "0.20", optional = true }
 derive-jinja-renderer = { workspace = true, optional = true }
 free-icons = { version = "0.7", optional = true }
-http = { version = "1.0.0", optional = true }
-minify-html = { version = "0.15.0", optional = true }
-minijinja = { version = "1.0.10", features = ["speedups", "loader"] }
-serde = { version = "1.0.193", features = ["derive"] }
+http = { version = "1.0", optional = true }
+minify-html = { version = "0.15", optional = true }
+minijinja = { version = "1.0", features = ["speedups", "loader"] }
+serde = { version = "1", features = ["derive"] }
 
 [dev-dependencies]
-insta = { version = "1.34.0", features = ["json", "redactions"] }
-once_cell = "1.19.0"
+insta = { version = "1.34", features = ["json", "redactions"] }
+once_cell = "1.19"

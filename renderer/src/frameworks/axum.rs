@@ -4,7 +4,7 @@ use http::StatusCode;
 use crate::{RenderContext, Renderer};
 
 impl Renderer {
-    pub fn into_response<T: RenderContext>(&self, context: &T) -> Response {
+    pub fn render_response<T: RenderContext>(&self, context: &T) -> Response {
         match self.render(context) {
             Ok(body) => {
                 let headers = [(

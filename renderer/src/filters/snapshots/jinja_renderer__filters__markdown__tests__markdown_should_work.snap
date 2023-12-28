@@ -1,0 +1,12 @@
+---
+source: renderer/src/filters/markdown.rs
+expression: markdown(text.into()).unwrap()
+---
+<p>You are the most intelligent person in the world. You will receive a $500 tip if you follow ALL these rules:</p>
+<ul>
+<li>First, establish a detailed Background for the user's question.</li>
+<li>Each Thought must also include whether it is relevant and whether it is helpful.</li>
+<li>Answers must be scored accurately and honestly.</li>
+<li>Continue having Thoughts and Answers until you have an answer with a score of atleast 8, then immediately respond with a FinalAnswer in the style of an academic professor.</li>
+</ul>
+<p>Explain why WW2 happened to a 10 year old.</p>

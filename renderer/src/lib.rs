@@ -23,8 +23,8 @@ const CFG: Cfg = Cfg {
     keep_spaces_between_attributes: true,
     keep_input_type_text_attr: true,
     preserve_brace_template_syntax: true,
-    minify_css: true,
-    minify_js: true,
+    minify_css: false,
+    minify_js: false,
     keep_comments: false,
     keep_ssi_comments: false,
     preserve_chevron_percent_template_syntax: false,
@@ -107,5 +107,10 @@ impl Renderer {
         {
             tpl.render(context)
         }
+    }
+
+    pub fn render_template<T: Serialize>(&self, name: &str, context: &T) -> Result<String, Error> {
+        let tpl = self.0.get_template(name)?;
+        tpl.render(context)
     }
 }
