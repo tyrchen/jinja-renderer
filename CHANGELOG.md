@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file. See [conven
 ### Features
 
 - init project and provoide basic functionality for renderer - ([f521b2e](https://github.com/tyrchen/jinja-renderer/commit/f521b2e58198d9d44370cf55d1604e9f4a58aa21)) - Tyr Chen
-- add markdown support - ([745e4ba](https://github.com/tyrchen/jinja-renderer/commit/745e4ba2298960bd04a4e3e7f01980ae404df5a0)) - Tyr Chen
+- add markdown support - ([b604295](https://github.com/tyrchen/jinja-renderer/commit/b60429579ed7093145d65706a83e432e0d56b2a9)) - Tyr Chen
 
 ### Miscellaneous Chores
 
