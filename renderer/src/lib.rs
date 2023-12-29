@@ -2,7 +2,7 @@ mod frameworks;
 
 #[cfg(feature = "minify")]
 use minify_html::{minify, Cfg};
-use minijinja::{Environment, Error};
+use minijinja::Environment;
 use serde::Serialize;
 use std::{
     borrow::Cow,
@@ -11,8 +11,10 @@ use std::{
 
 pub mod filters;
 
+pub use minijinja::Error;
+
 #[cfg(feature = "derive")]
-pub use derive_jinja_renderer::{Event, Template};
+pub use derive_jinja_renderer::{AllEvents, Event, Template};
 
 #[cfg(feature = "minify")]
 const CFG: Cfg = Cfg {
@@ -33,12 +35,15 @@ const CFG: Cfg = Cfg {
 };
 
 pub trait RenderContext: Serialize {
-    fn template_name(&self) -> &'static str;
+    /// The name of the template to render
+    const TEMPLATE_NAME: &'static str;
     /// The MIME type (Content-Type) of the data that gets rendered by this Template
     const MIME_TYPE: &'static str;
+    /// render the context data
+    fn render_context(&self, renderer: &Renderer) -> Result<String, Error>;
 }
 
-pub trait RenderEvent: RenderContext {
+pub trait RenderEvent {
     /// the receiver who shall process the event. client shall set receiver name in body
     const RECEIVERS: &'static [&'static str];
     /// the event name
@@ -47,6 +52,10 @@ pub trait RenderEvent: RenderContext {
     const EVENT_TARGET: &'static str;
     /// how data shall be swapped. Possible values: innerHTML, outerHTML, beforebegin, afterbegin, beforeend, afterend.
     const EVENT_SWAP: &'static str;
+    /// render the event data for SSE with the format as `encoded_json\nencoded_html`
+    fn render_event_data(&self, renderer: &Renderer) -> Result<String, Error>;
+    // event id
+    fn event_info(&self) -> String;
 }
 
 pub struct OwnedTemplate {
@@ -102,12 +111,33 @@ impl Renderer {
     }
 
     pub fn render<T: RenderContext>(&self, context: &T) -> Result<String, Error> {
-        let name = context.template_name();
+        let name = T::TEMPLATE_NAME;
         let tpl = self.0.get_template(name)?;
+        self.render_minified(tpl, T::MIME_TYPE, context)
+    }
+
+    pub fn render_template<T: Serialize>(&self, name: &str, context: &T) -> Result<String, Error> {
+        let tpl = self.0.get_template(name)?;
+        let mime = if name.ends_with("html.j2") {
+            "text/html; charset=utf-8"
+        } else if name.ends_with("json.j2") {
+            "application/json; charset=utf-8"
+        } else {
+            "text/plain; charset=utf-8"
+        };
+        self.render_minified(tpl, mime, context)
+    }
+
+    fn render_minified(
+        &self,
+        tpl: minijinja::Template<'_, '_>,
+        #[allow(unused_variables)] mime: &str,
+        context: &impl Serialize,
+    ) -> Result<String, Error> {
         #[cfg(feature = "minify")]
         {
             let ret = tpl.render(context)?;
-            if T::MIME_TYPE.starts_with("text/html") {
+            if mime.starts_with("text/html") {
                 let minified = minify(ret.as_bytes(), &CFG);
                 Ok(unsafe { String::from_utf8_unchecked(minified) })
             } else {
@@ -118,10 +148,5 @@ impl Renderer {
         {
             tpl.render(context)
         }
-    }
-
-    pub fn render_template<T: Serialize>(&self, name: &str, context: &T) -> Result<String, Error> {
-        let tpl = self.0.get_template(name)?;
-        tpl.render(context)
     }
 }
