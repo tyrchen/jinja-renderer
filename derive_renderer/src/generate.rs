@@ -1,14 +1,15 @@
-use crate::TemplateOptions;
+use crate::{EventOptions, TemplateOptions};
 // only proc_macro2::TokenStream is testable
 use proc_macro2::TokenStream;
 use quote::quote;
 
-pub(crate) fn generate(options: TemplateOptions) -> TokenStream {
+pub(crate) fn generate_render_context_trait(options: TemplateOptions) -> TokenStream {
     let TemplateOptions {
         ident,
         generics,
         name,
         mime,
+        ..
     } = options;
 
     let mime_code = if let Some(mime) = mime {
@@ -31,6 +32,37 @@ pub(crate) fn generate(options: TemplateOptions) -> TokenStream {
     }
 }
 
+pub(crate) fn generate_event_trait(options: EventOptions) -> TokenStream {
+    let EventOptions {
+        ident,
+        generics,
+        name,
+        receivers,
+        target,
+        swap,
+    } = options;
+
+    let receivers = receivers
+        .trim()
+        .split(' ')
+        .map(|s| s.trim())
+        .collect::<Vec<_>>();
+    for receiver in &receivers {
+        if !receiver.starts_with('#') {
+            panic!("receivers must start with #, and separated by space");
+        }
+    }
+
+    quote! {
+        impl #generics jinja_renderer::RenderEvent for #ident #generics {
+            const RECEIVERS: &'static [&'static str] = &[#(#receivers),*];
+            const EVENT_NAME: &'static str = #name;
+            const EVENT_TARGET: &'static str = #target;
+            const EVENT_SWAP: &'static str = #swap;
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -42,7 +74,7 @@ mod tests {
     fn macro_should_work() {
         let options = generate_input("foo.html.j2", None);
         let expected = generate_expected("foo.html.j2", "text/html; charset=utf-8");
-        let actual = generate(options).to_string();
+        let actual = generate_render_context_trait(options).to_string();
         assert_eq!(actual, expected.to_string());
     }
 
@@ -50,14 +82,14 @@ mod tests {
     fn macro_default_mime_should_work() {
         let options = generate_input("foo.js.j2", None);
         let expected = generate_expected("foo.js.j2", "text/plain; charset=utf-8");
-        let actual = generate(options).to_string();
+        let actual = generate_render_context_trait(options).to_string();
         assert_eq!(actual, expected.to_string());
     }
     #[test]
     fn macro_with_mime_should_work() {
         let options = generate_input("foo.json.j2", Some("application/json"));
         let expected = generate_expected("foo.json.j2", "application/json");
-        let actual = generate(options).to_string();
+        let actual = generate_render_context_trait(options).to_string();
         assert_eq!(actual, expected.to_string());
     }
 

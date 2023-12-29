@@ -1,5 +1,13 @@
+#[cfg(feature = "with-axum")]
 pub use axum_core::response::{IntoResponse, Response};
+#[cfg(feature = "with-axum-06")]
+pub use axum_core_03::response::{IntoResponse, Response};
+#[cfg(feature = "with-axum")]
 use http::StatusCode;
+#[cfg(feature = "with-axum-06")]
+use http_02 as http;
+#[cfg(feature = "with-axum-06")]
+use http_02::StatusCode;
 
 use crate::{RenderContext, Renderer};
 

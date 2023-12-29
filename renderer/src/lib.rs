@@ -12,7 +12,7 @@ use std::{
 pub mod filters;
 
 #[cfg(feature = "derive")]
-pub use derive_jinja_renderer::Template;
+pub use derive_jinja_renderer::{Event, Template};
 
 #[cfg(feature = "minify")]
 const CFG: Cfg = Cfg {
@@ -36,6 +36,17 @@ pub trait RenderContext: Serialize {
     fn template_name(&self) -> &'static str;
     /// The MIME type (Content-Type) of the data that gets rendered by this Template
     const MIME_TYPE: &'static str;
+}
+
+pub trait RenderEvent: RenderContext {
+    /// the receiver who shall process the event. client shall set receiver name in body
+    const RECEIVERS: &'static [&'static str];
+    /// the event name
+    const EVENT_NAME: &'static str;
+    /// the event target, should be a css selector, e.g. #id, .class, tag, or 'dynamic'. 'dynamic' means the target is the id in the given data structure
+    const EVENT_TARGET: &'static str;
+    /// how data shall be swapped. Possible values: innerHTML, outerHTML, beforebegin, afterbegin, beforeend, afterend.
+    const EVENT_SWAP: &'static str;
 }
 
 pub struct OwnedTemplate {

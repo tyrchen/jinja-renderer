@@ -1,9 +1,10 @@
-use derive_jinja_renderer::Template;
+use derive_jinja_renderer::{Event, Template};
 use jinja_renderer::{OwnedTemplate, Renderer};
 use serde::Serialize;
 
-#[derive(Debug, Serialize, Template)]
+#[derive(Debug, Serialize, Template, Event)]
 #[template(name = "foo.html.j2")]
+#[event(name = "foo", receivers = "#bar", target = "#baz", swap = "innerHTML")]
 struct Foo<'a> {
     bar: &'a str,
 }

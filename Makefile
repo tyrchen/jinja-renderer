@@ -1,8 +1,11 @@
 build:
 	@BUILD_ICONS=1 cargo build
 
+lint:
+	@cargo clippy --all-targets --features icon --features markdown --features minify --features with-axum --tests --benches -- -D warnings
+
 test:
-	@cargo nextest run --all-features
+	@cargo nextest run --features icon --features markdown --features minify --features with-axum
 
 release:
 	@cargo release tag --execute
