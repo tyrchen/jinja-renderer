@@ -63,19 +63,23 @@ pub(crate) fn generate_event_trait(options: EventOptions) -> TokenStream {
       }
     };
 
-    let event_info_to_string = quote! { serde_json::to_string(&self.event_info()).expect("even info should be a valid json") };
+    let event_info_with_data = quote! {
+      let json = serde_json::json!({"info": self.event_info(), "data": self});
+      Ok(serde_json::to_string(&json).expect("even info should be a valid json"))
+    };
     let render_event_code = if !attrs.is_empty() {
+        // if template is specified, render template and attach it to event info
         quote! {
-            use jinja_renderer::RenderContext;
-            let mut ret = #event_info_to_string;
+            let mut ret = serde_json::to_string(&self.event_info()).expect("even info should be a valid json");
             let data = self.render(renderer)?;
             ret.push_str("\n");
             ret.push_str(&data);
             Ok(ret)
         }
     } else {
+        // otherwise, put the data into event info
         quote! {
-          Ok(#event_info_to_string)
+          #event_info_with_data
         }
     };
 
@@ -308,7 +312,6 @@ mod tests {
 
         let render_data = if with_template {
             quote! {
-                use jinja_renderer::RenderContext;
                 let mut ret = serde_json::to_string(&self.event_info()).expect("even info should be a valid json");
                 let data = self.render(renderer)?;
                 ret.push_str("\n");
@@ -317,7 +320,8 @@ mod tests {
             }
         } else {
             quote! {
-                Ok(serde_json::to_string(&self.event_info()).expect("even info should be a valid json"))
+                let json = serde_json::json!({"info": self.event_info(), "data": self});
+                Ok(serde_json::to_string(&json).expect("even info should be a valid json"))
             }
         };
 

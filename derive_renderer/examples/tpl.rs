@@ -1,5 +1,5 @@
 use derive_jinja_renderer::{AllEvents, Event, Template};
-use jinja_renderer::{OwnedTemplate, RenderEvent, Renderer};
+use jinja_renderer::{OwnedTemplate, RenderContext, RenderEvent, Renderer};
 use serde::Serialize;
 
 #[derive(Debug, Serialize, Template, Event)]
