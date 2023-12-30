@@ -64,13 +64,12 @@ pub(crate) fn generate_event_trait(options: EventOptions) -> TokenStream {
     };
 
     let event_info_with_data = quote! {
-      let json = serde_json::json!({"info": self.event_info(), "data": self});
-      Ok(serde_json::to_string(&json).expect("even info should be a valid json"))
+        serde_json::to_string(&serde_json::json!({"info": self.event_info(), "data": self})).expect("even info should be a valid json")
     };
     let render_event_code = if !attrs.is_empty() {
         // if template is specified, render template and attach it to event info
         quote! {
-            let mut ret = serde_json::to_string(&self.event_info()).expect("even info should be a valid json");
+            let mut ret = #event_info_with_data;
             let data = self.render(renderer)?;
             ret.push_str("\n");
             ret.push_str(&data);
@@ -79,7 +78,7 @@ pub(crate) fn generate_event_trait(options: EventOptions) -> TokenStream {
     } else {
         // otherwise, put the data into event info
         quote! {
-          #event_info_with_data
+          Ok(#event_info_with_data)
         }
     };
 
@@ -310,9 +309,12 @@ mod tests {
             }
         };
 
+        let event_info_with_data = quote! {
+            serde_json::to_string(&serde_json::json!({"info": self.event_info(), "data": self})).expect("even info should be a valid json")
+        };
         let render_data = if with_template {
             quote! {
-                let mut ret = serde_json::to_string(&self.event_info()).expect("even info should be a valid json");
+                let mut ret = #event_info_with_data;
                 let data = self.render(renderer)?;
                 ret.push_str("\n");
                 ret.push_str(&data);
@@ -320,8 +322,7 @@ mod tests {
             }
         } else {
             quote! {
-                let json = serde_json::json!({"info": self.event_info(), "data": self});
-                Ok(serde_json::to_string(&json).expect("even info should be a valid json"))
+                Ok(#event_info_with_data)
             }
         };
 
