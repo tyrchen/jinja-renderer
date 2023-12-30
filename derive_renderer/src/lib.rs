@@ -1,7 +1,11 @@
-mod generate;
+mod all_events;
+mod context;
+mod event;
 
+use all_events::generate_all_events_fn;
+use context::generate_render_context_trait;
 use darling::{FromDeriveInput, FromField, FromVariant};
-use generate::{generate_all_events_fn, generate_event_trait, generate_render_context_trait};
+use event::generate_event_trait;
 use proc_macro::TokenStream;
 use syn::{parse_macro_input, DeriveInput, Ident};
 
@@ -20,12 +24,19 @@ struct TemplateOptions {
 struct EventOptions {
     ident: Ident,
     generics: syn::Generics,
+    #[darling(default)]
     name: String,
+    #[darling(default)]
     receivers: String,
+    #[darling(default = "default_target")]
     target: String,
     #[darling(default = "default_swap")]
     swap: String,
-    data: darling::ast::Data<darling::util::Ignored, FieldData>,
+    #[darling(default = "default_id_field")]
+    id_field: String,
+    #[darling(default = "default_id_prefix")]
+    id_prefix: String,
+    data: darling::ast::Data<EnumData, FieldData>,
     attrs: Vec<syn::Attribute>,
 }
 
@@ -45,7 +56,6 @@ struct FieldData {
 
 #[derive(Debug, FromVariant)]
 struct EnumData {
-    #[allow(dead_code)]
     ident: syn::Ident,
     fields: darling::ast::Fields<FieldData>,
 }
@@ -73,4 +83,16 @@ pub fn derive_all_events(input: TokenStream) -> TokenStream {
 
 fn default_swap() -> String {
     "innerHTML".to_string()
+}
+
+fn default_target() -> String {
+    "dynamic".to_string()
+}
+
+fn default_id_field() -> String {
+    "id".to_string()
+}
+
+fn default_id_prefix() -> String {
+    "id-".to_string()
 }

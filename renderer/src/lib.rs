@@ -40,22 +40,24 @@ pub trait RenderContext: Serialize {
     /// The MIME type (Content-Type) of the data that gets rendered by this Template
     const MIME_TYPE: &'static str;
     /// render the context data
-    fn render_context(&self, renderer: &Renderer) -> Result<String, Error>;
+    fn render(&self, renderer: &Renderer) -> Result<String, Error>;
+}
+
+#[derive(Debug, Serialize)]
+pub struct EventInfo {
+    pub name: &'static str,
+    pub receivers: &'static [&'static str],
+    pub target: Cow<'static, str>,
+    pub swap: &'static str,
 }
 
 pub trait RenderEvent {
-    /// the receiver who shall process the event. client shall set receiver name in body
-    const RECEIVERS: &'static [&'static str];
     /// the event name
     const EVENT_NAME: &'static str;
-    /// the event target, should be a css selector, e.g. #id, .class, tag, or 'dynamic'. 'dynamic' means the target is the id in the given data structure
-    const EVENT_TARGET: &'static str;
-    /// how data shall be swapped. Possible values: innerHTML, outerHTML, beforebegin, afterbegin, beforeend, afterend.
-    const EVENT_SWAP: &'static str;
     /// render the event data for SSE with the format as `encoded_json\nencoded_html`
     fn render_event_data(&self, renderer: &Renderer) -> Result<String, Error>;
     // event id
-    fn event_info(&self) -> String;
+    fn event_info(&self) -> EventInfo;
 }
 
 pub struct OwnedTemplate {
@@ -108,12 +110,6 @@ impl Renderer {
             self.add_template_owned(tpl.name, tpl.data)?;
         }
         Ok(())
-    }
-
-    pub fn render<T: RenderContext>(&self, context: &T) -> Result<String, Error> {
-        let name = T::TEMPLATE_NAME;
-        let tpl = self.0.get_template(name)?;
-        self.render_minified(tpl, T::MIME_TYPE, context)
     }
 
     pub fn render_template<T: Serialize>(&self, name: &str, context: &T) -> Result<String, Error> {

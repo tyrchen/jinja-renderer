@@ -1,4 +1,4 @@
-use jinja_renderer::{OwnedTemplate, Renderer, Template};
+use jinja_renderer::{OwnedTemplate, RenderContext, Renderer, Template};
 use once_cell::sync::OnceCell;
 use serde::Serialize;
 
@@ -15,7 +15,7 @@ struct Foo<'a> {
 fn test_minify() {
     let data = Foo { bar: "baz" };
     let renderer = get_render();
-    let ret = renderer.render(&data).unwrap();
+    let ret = data.render(renderer).unwrap();
 
     assert_eq!(ret, "<html><body>baz</body></html>");
 }

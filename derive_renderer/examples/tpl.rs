@@ -20,11 +20,13 @@ struct Bar<'a> {
     name = "bar",
     receivers = "#bar",
     target = "dynamic",
+    id_prefix = "foo-",
+    id_field = "foo_id",
     swap = "innerHTML"
 )]
 struct Baz<'a> {
     bar: &'a str,
-    id: &'a str,
+    foo_id: &'a str,
 }
 
 #[allow(dead_code)]
@@ -50,7 +52,7 @@ fn main() {
         Bar { bar: "baz" }.render_event_data(&renderer).unwrap(),
         Baz {
             bar: "baz",
-            id: "1b282198-a671-11ee-ab45-76ae4616a5de"
+            foo_id: "1b282198-a671-11ee-ab45-76ae4616a5de"
         }
         .render_event_data(&renderer)
         .unwrap(),

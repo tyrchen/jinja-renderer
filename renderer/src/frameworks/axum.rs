@@ -12,8 +12,8 @@ use http_02::StatusCode;
 use crate::{RenderContext, Renderer};
 
 impl Renderer {
-    pub fn render_response<T: RenderContext>(&self, context: &T) -> Response {
-        match self.render(context) {
+    pub fn render_response<T: RenderContext>(&self, data: &T) -> Response {
+        match data.render(self) {
             Ok(body) => {
                 let headers = [(
                     http::header::CONTENT_TYPE,
