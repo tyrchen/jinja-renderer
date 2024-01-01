@@ -51,6 +51,7 @@ mod tests {
         bar: &'a str,
         id: &'a str,
     }
+
     #[test]
     fn all_events_should_work() {
         let input = parse_quote! {

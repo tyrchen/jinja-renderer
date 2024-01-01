@@ -10,6 +10,7 @@ use http_02 as http;
 use http_02::StatusCode;
 
 use crate::{RenderContext, Renderer};
+use tracing::warn;
 
 impl Renderer {
     pub fn render_response<T: RenderContext>(&self, data: &T) -> Response {
@@ -22,7 +23,10 @@ impl Renderer {
 
                 (headers, body).into_response()
             }
-            Err(_) => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
+            Err(e) => {
+                warn!("failed to render response: {}", e);
+                StatusCode::INTERNAL_SERVER_ERROR.into_response()
+            }
         }
     }
 }

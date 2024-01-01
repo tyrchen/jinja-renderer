@@ -47,7 +47,7 @@ pub(crate) fn generate_event_trait(options: EventOptions) -> TokenStream {
         if !check_id_exists(&data, &id_field) {
             panic!("target is dynamic, but {id_field} field not found");
         } else {
-            quote! { format!("#{}{}", #id_prefix, self.#id_ident).into() }
+            quote! { format!("{}{}", #id_prefix, self.#id_ident).into() }
         }
     } else {
         quote! { #target.into() }
@@ -59,6 +59,7 @@ pub(crate) fn generate_event_trait(options: EventOptions) -> TokenStream {
           receivers: &[#(#receivers),*],
           target: #target_code,
           swap: #swap,
+          id_field: #id_field,
         }
       }
     };
@@ -277,7 +278,7 @@ mod tests {
         };
         let (event_line, id_line) = if with_id {
             (
-                quote! { #[event(name = "foo", receivers = "#bar", target = "dynamic", swap = "innerHTML", id_prefix = "my-")] },
+                quote! { #[event(name = "foo", receivers = "#bar", target = "dynamic", swap = "innerHTML", id_prefix = "#my-")] },
                 quote! { id: &'a str },
             )
         } else {
@@ -301,7 +302,7 @@ mod tests {
     fn generate_event_expected(with_template: bool, with_id: bool) -> TokenStream {
         let target_info = if with_id {
             quote! {
-              format!("#{}{}", "my-", self.id).into()
+              format!("{}{}", "#my-", self.id).into()
             }
         } else {
             quote! {
@@ -340,6 +341,7 @@ mod tests {
                     receivers: &["#bar"],
                     target: #target_info,
                     swap: "innerHTML",
+                    id_field: "id",
                   }
 
                 }

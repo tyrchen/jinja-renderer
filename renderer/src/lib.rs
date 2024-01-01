@@ -44,11 +44,13 @@ pub trait RenderContext: Serialize {
 }
 
 #[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct EventInfo {
     pub name: &'static str,
     pub receivers: &'static [&'static str],
     pub target: Cow<'static, str>,
     pub swap: &'static str,
+    pub id_field: &'static str,
 }
 
 pub trait RenderEvent {

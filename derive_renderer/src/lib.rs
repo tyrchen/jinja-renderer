@@ -94,5 +94,5 @@ fn default_id_field() -> String {
 }
 
 fn default_id_prefix() -> String {
-    "id-".to_string()
+    "#id-".to_string()
 }

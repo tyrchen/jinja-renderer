@@ -20,7 +20,7 @@ struct Bar<'a> {
     name = "bar",
     receivers = "#bar",
     target = "dynamic",
-    id_prefix = "foo-",
+    id_prefix = "#foo-",
     id_field = "foo_id",
     swap = "innerHTML"
 )]

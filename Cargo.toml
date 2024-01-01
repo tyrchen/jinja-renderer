@@ -4,4 +4,4 @@ resolver = "2"
 
 [workspace.dependencies]
 jinja-renderer = { version = "0.4", path = "renderer" }
-derive-jinja-renderer = { version = "0.2", path = "derive_renderer" }
+derive-jinja-renderer = { version = "0.3", path = "derive_renderer" }
