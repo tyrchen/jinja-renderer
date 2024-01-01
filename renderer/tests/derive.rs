@@ -25,7 +25,7 @@ fn test_minify() {
 fn test_not_minify() {
     let data = Foo { bar: "baz" };
     let renderer = get_render();
-    let ret = renderer.render(&data).unwrap();
+    let ret = data.render(renderer).unwrap();
 
     assert_eq!(ret, "<html>\n  <body>\n    baz\n  </body>\n</html>");
 }

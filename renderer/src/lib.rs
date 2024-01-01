@@ -14,7 +14,7 @@ pub mod filters;
 pub use minijinja::Error;
 
 #[cfg(feature = "derive")]
-pub use derive_jinja_renderer::{AllEvents, Event, Template};
+pub use derive_jinja_renderer::*;
 
 #[cfg(feature = "minify")]
 const CFG: Cfg = Cfg {
