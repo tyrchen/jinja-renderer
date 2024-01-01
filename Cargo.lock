@@ -965,7 +965,7 @@ checksum = "b1a46d1a171d865aa5f83f92695765caa047a9b4cbae2cbf37dbd613a793fd4c"
 
 [[package]]
 name = "jinja-renderer"
-version = "0.4.0"
+version = "0.4.1"
 dependencies = [
  "axum-core 0.3.4",
  "axum-core 0.4.2",
