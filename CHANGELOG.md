@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 ---
+## [jinja-renderer-v0.4.1](https://github.com/tyrchen/jinja-renderer/compare/jinja-renderer-v0.4.0..jinja-renderer-v0.4.1) - 2024-01-01
+
+### Bug Fixes
+
+- update version after workaround of cargo publish - ([3c13e9d](https://github.com/tyrchen/jinja-renderer/commit/3c13e9d237ea807f1de0a621270220f2e9c18dc7)) - Tyr Chen
+
+### Other
+
+- Update CHANGELOG.md - ([29198ef](https://github.com/tyrchen/jinja-renderer/commit/29198eff9925fb9e4505b59bdba4681438e48a4e)) - Tyr Chen
+
+---
 ## [jinja-renderer-v0.4.0](https://github.com/tyrchen/jinja-renderer/compare/jinja-renderer-v0.2.0..jinja-renderer-v0.4.0) - 2024-01-01
 
 ### Bug Fixes
