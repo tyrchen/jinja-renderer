@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 ---
+## [jinja-renderer-v0.4.0](https://github.com/tyrchen/jinja-renderer/compare/jinja-renderer-v0.2.0..jinja-renderer-v0.4.0) - 2024-01-01
+
+### Bug Fixes
+
+- event rendering without template should render self as data - ([8219a3d](https://github.com/tyrchen/jinja-renderer/commit/8219a3d7ebb3cb36eebb6ed12a9e19ccdabe16aa)) - Tyr Chen
+
+### Features
+
+- support different axum version and add event derive macro - ([e44dc24](https://github.com/tyrchen/jinja-renderer/commit/e44dc24fd448a6cc81fd92a6a5841f7c5e32eb57)) - Tyr Chen
+- add Event trait for SSE event rendering - ([98df26d](https://github.com/tyrchen/jinja-renderer/commit/98df26d7df0bfd25b1ff6d42c2ad92b0560a2258)) - Tyr Chen
+- refactor and support more options for event macro - ([a0668fe](https://github.com/tyrchen/jinja-renderer/commit/a0668febbd88430c0417e9f70e543493f9e035cd)) - Tyr Chen
+- many macro improvement - ([2e5aac4](https://github.com/tyrchen/jinja-renderer/commit/2e5aac4d38ba7ecf8e2437421bb02e0d37bdfe41)) - Tyr Chen
+
+### Miscellaneous Chores
+
+- let event info to take orignal data - ([665d9d1](https://github.com/tyrchen/jinja-renderer/commit/665d9d101a0bbf65a2baef51657e4a12e3d2984f)) - Tyr Chen
+
+### Other
+
+- Update CHANGELOG.md - ([c0f85ba](https://github.com/tyrchen/jinja-renderer/commit/c0f85babdb7cf26d8318def862971d2bd76969f0)) - Tyr Chen
+
+---
 ## [jinja-renderer-v0.2.0] - 2023-12-28
 
 ### Features
